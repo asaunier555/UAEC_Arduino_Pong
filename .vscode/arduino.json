@@ -1,0 +1,4 @@
+{
+    "sketch": "VSTest\\VSTest.ino",
+    "board": "arduino:avr:uno"
+}
