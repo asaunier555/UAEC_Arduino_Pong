@@ -33,8 +33,9 @@ int ball_x = 64, ball_y = 32;
 int ball_dir_x = 1, ball_dir_y = 1;
 
 // init game states
-boolean gameIsRunning = true;
-boolean resetBall = false;
+bool gameIsRunning = true;
+bool resetBall = false;
+bool TIMEOUT = false;
 
 int ball_update;
 int paddle_update;
@@ -63,10 +64,17 @@ void setup()
   tft.println("UAEC");
   tft.println("PONG");
 
+  int timeoutcount = 0;
   // wait for game to start
   while (readStick() > 400 && readStick() < 600)
   {
     delay(100);
+    timeoutcount += 100;
+    if(timeoutcount == 5000){
+      
+      TIMEOUT = true;
+      break;
+    }
   }
   int start = millis();
 
@@ -179,7 +187,7 @@ void loop()
   {
     paddle_update += PADDLE__REFRESH_RATE;
 
-    // CPU paddle
+    // CPU1 paddle
     tft.drawFastVLine(CPU_X, cpu_y, PADDLE_HEIGHT, BLACK);
     const int half_paddle = PADDLE_HEIGHT >> 1;
     if (cpu_y + half_paddle > ball_y)
@@ -197,21 +205,43 @@ void loop()
     tft.drawFastVLine(CPU_X, cpu_y, PADDLE_HEIGHT, BLUE);
 
     // Player paddle
-    tft.drawFastVLine(PLAYER_X, player_y, PADDLE_HEIGHT, BLACK);
-    if (up_state)
+    if (!TIMEOUT)
     {
-      player_y -= PADDLE_RATE;
+      tft.drawFastVLine(PLAYER_X, player_y, PADDLE_HEIGHT, BLACK);
+      if (up_state)
+      {
+        player_y -= PADDLE_RATE;
+      }
+      if (down_state)
+      {
+        player_y += PADDLE_RATE;
+      }
+      up_state = down_state = false;
+      if (player_y < 1)
+        player_y = 1;
+      if (player_y + PADDLE_HEIGHT > 128)
+        player_y = 128 - PADDLE_HEIGHT;
+      tft.drawFastVLine(PLAYER_X, player_y, PADDLE_HEIGHT, YELLOW);
     }
-    if (down_state)
+    // CPU2 Only if splash screen times out
+    if (TIMEOUT)
     {
-      player_y += PADDLE_RATE;
+      tft.drawFastVLine(PLAYER_X, player_y, PADDLE_HEIGHT, YELLOW);
+      const int half_paddle = PADDLE_HEIGHT >> 1;
+      if (player_y + half_paddle > ball_y)
+      {
+        player_y -= PADDLE_RATE;
+      }
+      if (player_y + half_paddle < ball_y)
+      {
+        player_y += PADDLE_RATE;
+      }
+      if (player_y < 1)
+        player_y = 1;
+      if (player_y + PADDLE_HEIGHT > 128)
+        player_y = 128 - PADDLE_HEIGHT;
+      tft.drawFastVLine(PLAYER_X, player_y, PADDLE_HEIGHT, YELLOW);
     }
-    up_state = down_state = false;
-    if (player_y < 1)
-      player_y = 1;
-    if (player_y + PADDLE_HEIGHT > 128)
-      player_y = 128 - PADDLE_HEIGHT;
-    tft.drawFastVLine(PLAYER_X, player_y, PADDLE_HEIGHT, YELLOW);
   }
 }
 
@@ -260,11 +290,11 @@ void gameOver()
 
   CPU_SCORE = PLAYER_SCORE = 0;
 
-int  start = millis();
+  int start = millis();
   tft.fillScreen(BLACK);
   drawCourt();
   while (millis() - start < 2000)
-  ;
+    ;
   ball_update = millis();
   paddle_update = ball_update;
   gameIsRunning = true;
@@ -279,7 +309,7 @@ void showScore()
   tft.fillScreen(BLACK);
   drawCourt();
 
-// draw text
+  // draw text
   tft.setCursor(32, 4);
   tft.setTextColor(WHITE);
   tft.setTextSize(3);
@@ -296,7 +326,7 @@ void showScore()
   tft.print(String(PLAYER_SCORE));
 
   delay(2000);
-int  start = millis();
+  int start = millis();
 
   tft.fillScreen(BLACK);
   drawCourt();
