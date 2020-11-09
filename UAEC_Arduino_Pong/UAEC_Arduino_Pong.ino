@@ -226,7 +226,7 @@ void loop()
     // CPU2 Only if splash screen times out
     if (TIMEOUT)
     {
-      tft.drawFastVLine(PLAYER_X, player_y, PADDLE_HEIGHT, YELLOW);
+      tft.drawFastVLine(PLAYER_X, player_y, PADDLE_HEIGHT, BLACK);
       const int half_paddle = PADDLE_HEIGHT >> 1;
       if (player_y + half_paddle > ball_y)
       {
