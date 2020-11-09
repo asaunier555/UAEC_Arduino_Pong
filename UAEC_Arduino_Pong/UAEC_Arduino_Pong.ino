@@ -20,7 +20,7 @@ float jStick = 0;
 //  Define const for game physics
 const int PADDLE_RATE = 1;
 const int PADDLE__REFRESH_RATE = 20;
-const int BALL_RATE = 20;
+const int BALL_RATE = 25;
 const int PADDLE_HEIGHT = 35;
 int MAX_SCORE = 10;
 
