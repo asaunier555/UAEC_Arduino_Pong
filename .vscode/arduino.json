@@ -1,4 +1,5 @@
 {
-    "sketch": "VSTest\\VSTest.ino",
-    "board": "arduino:avr:uno"
+    "sketch": "UAEC_Arduino_Pong\\UAEC_Arduino_Pong.ino",
+    "board": "arduino:avr:uno",
+    "port": "COM3"
 }
