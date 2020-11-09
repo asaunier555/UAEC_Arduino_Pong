@@ -13,3 +13,7 @@ This year the club has chosen to create 4 Arduino based mini projects.  The COVI
 - Arduino Uno
 
 More information and instructions can be found on the club presentation
+
+![](https://raw.githubusercontent.com/asaunier555/UAEC_Arduino_Pong/master/UAEC_Arduino_Pong_Photos/IMG_20201108_215500.jpg)
+
+![](https://raw.githubusercontent.com/asaunier555/UAEC_Arduino_Pong/master/UAEC_Arduino_Pong_Photos/IMG_20201108_215651.jpg)
