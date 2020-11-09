@@ -36,12 +36,12 @@ int ball_dir_x = 1, ball_dir_y = 1;
 boolean gameIsRunning = true;
 boolean resetBall = false;
 
-unsigned long ball_update;
-unsigned long paddle_update;
+int ball_update;
+int paddle_update;
 
+// spawn Locations
 const int CPU_X = 12;
 int cpu_y = 32;
-
 const int PLAYER_X = 148;
 int player_y = 32;
 
@@ -53,7 +53,6 @@ void setup()
 
   // init LCD
   tft.initR(INITR_BLACKTAB);
-
   tft.setRotation(1);
 
   // Init screen
@@ -63,12 +62,13 @@ void setup()
   tft.setTextSize(5);
   tft.println("UAEC");
   tft.println("PONG");
+
   // wait for game to start
   while (readStick() > 400 && readStick() < 600)
   {
     delay(100);
   }
-  unsigned long start = millis();
+  int start = millis();
 
   // black screen
   tft.fillScreen(BLACK);
@@ -88,9 +88,9 @@ void loop()
 {
 
   // clear last movement
-  unsigned long time = millis();
-  static bool up_state = false;
-  static bool down_state = false;
+  int time = millis();
+  bool up_state = false;
+  bool down_state = false;
 
   // read joystick
   up_state |= (readStick() < 400);
@@ -260,11 +260,11 @@ void gameOver()
 
   CPU_SCORE = PLAYER_SCORE = 0;
 
-  unsigned long start = millis();
+int  start = millis();
   tft.fillScreen(BLACK);
   drawCourt();
   while (millis() - start < 2000)
-    ;
+  ;
   ball_update = millis();
   paddle_update = ball_update;
   gameIsRunning = true;
@@ -273,10 +273,13 @@ void gameOver()
 
 void showScore()
 {
+
+  // clear screen
   gameIsRunning = false;
   tft.fillScreen(BLACK);
   drawCourt();
 
+// draw text
   tft.setCursor(32, 4);
   tft.setTextColor(WHITE);
   tft.setTextSize(3);
@@ -293,7 +296,7 @@ void showScore()
   tft.print(String(PLAYER_SCORE));
 
   delay(2000);
-  unsigned long start = millis();
+int  start = millis();
 
   tft.fillScreen(BLACK);
   drawCourt();
